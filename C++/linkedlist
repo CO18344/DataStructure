@@ -1,0 +1,125 @@
+#include<iostream>
+#include<stdio.h>
+#include<malloc.h>
+#include<conio.h>
+using namespace std;
+struct node
+{
+int data;
+struct node * next;
+};
+
+struct node * start = NULL;
+struct node * ptr =NULL;
+struct node * preptr =NULL;
+
+void insertion(struct node **start,int info,int pos);
+void display(struct node * start);
+void deletion(struct node **start,int pos);
+
+void insertion(struct node **start,int info,int pos)
+{
+	
+	struct node * fresh = (struct node *)malloc(sizeof(struct node));
+	if(fresh == NULL)
+	{
+		printf("Memory overflow!!!!");
+		exit(0);
+	}
+
+	fresh->data=info;
+	fresh->next=NULL;
+
+
+
+	if(*start == NULL)
+	{
+		*start=fresh;
+	}
+	else
+	{
+		if(pos==1)
+		{
+			fresh->next=*start;
+			*start=fresh;
+		}
+		else
+		{
+			int count = 1;
+			ptr=*start;
+			while(count<=pos-1 && ptr!=NULL)
+			{
+				preptr=ptr;
+				ptr=ptr->next;
+				count++;
+			}
+
+			preptr->next=fresh;
+			fresh->next=ptr;
+		}
+	}
+
+
+}
+
+void display(struct node * start)
+{
+	while(start!=NULL)
+	{
+		printf("%d --> ",start->data);
+		start=start->next;
+	}
+	printf("NULL\n");
+}
+
+void deletion(struct node **start,int pos)
+{
+	if(*start==NULL)
+	{
+		printf("UNERFLOW!!!!!!!");
+		return;
+	}
+	else
+	{
+		if(pos==1 || (*start)->next==NULL)
+		{
+			preptr=*start;
+			*start=(*start)->next;
+			free(preptr);
+		}
+		else
+		{
+			int count=1;
+			ptr=*start;
+			while(count<=pos-1 && ptr->next!=NULL)
+			{
+				preptr=ptr;
+				ptr=ptr->next;
+				count++;
+			}
+
+			preptr->next=ptr->next;
+			free(ptr);
+		}
+	}
+}
+int main()
+{
+
+	int d,pos,choice;
+label:
+	system("cls");
+	printf("Choice: ");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 0:	printf("Data:  ");scanf("%d",&d);printf("Pos: ");scanf("%d",&pos);insertion(&start,d,pos);break;
+		case 1: printf("Pos: ");scanf("%d",&pos);deletion(&start,pos);getch();break;
+		case 2: display(start);getch();break;
+		case 3: exit(0);
+	}
+	goto label;
+
+	return 0;
+}
+
